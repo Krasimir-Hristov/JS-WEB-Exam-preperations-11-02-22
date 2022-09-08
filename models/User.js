@@ -2,6 +2,8 @@ const { Schema, model} = require('mongoose');
 
 
 //TODO change user model according to exam description
+//TODO add validations
+
 const userSchema = new Schema({
     username: { type: String, required: true },
     hashedPassword: { type: String, required: true }
