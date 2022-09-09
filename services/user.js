@@ -7,7 +7,7 @@ async function register(username, password) {
     const existing = await getUserByUsername(username);
 
     if(existing) {
-        throw new Error('Username is taken!');
+        throw new Error('Incorrect username or password');
     }
 
     const hashedPassword = await hash(password, 10);
@@ -32,7 +32,7 @@ async function login(username, password) {
     const hasMatch = await compare(password, user.hashedPassword);
 
     if(!hasMatch) {
-        throw new Error('Incorrect password');
+        throw new Error('Incorrect username or password');
     }
 
     return user;
@@ -40,7 +40,7 @@ async function login(username, password) {
 
 //TODO identify user by given indentifier
 async function getUserByUsername(username) {
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ username: new RegExp(`^${username}$`, 'i') });
 
     return user;
 }
