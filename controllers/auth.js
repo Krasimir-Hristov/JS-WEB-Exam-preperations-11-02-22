@@ -6,42 +6,44 @@ const router = require('express').Router();
 
 
 router.get('/register', isGuest(), (req, res) => {
-    res.render('register')
+    res.render('register', { title: 'Register Page' })
 });
 
-//TODO check form action, method, field names
 router.post('/register', isGuest(), async (req, res) => {
     try {
         if (req.body.password != req.body.repass) {
             throw new Error('Passwords dont match !');
         }
-        const user = await register(req.body.username, req.body.password);
+        const user = await register(req.body.firstName, req.body.lastName, req.body.email, req.body.password);
         req.session.user = user;
-        res.redirect('/'); //TODO check redirect requriments
+        res.redirect('/'); 
     } catch (err) {
         console.error(err);
-        //TODO send error messages
         const errors = mapErrors(err);
-        res.render('register', { data: { username: req.body.username }, errors });
+        const data = {
+            firstName: req.body,
+            lastName: req.body, 
+            email: req.body
+        }
+        res.render('register', { title: 'Register Page',  data, errors });
     }
 });
 
 router.get('/login', isGuest(), (req, res) => {
-    res.render('login', { layout: false });
+    res.render('login', { title: 'Login Page' });
 });
 
 //TODO check form action, method, field names
 
 router.post('/login', isGuest(), async (req, res) => {
     try {
-        const user = await login(req.body.username, req.body.password);
+        const user = await login(req.body.email, req.body.password);
         req.session.user = user;
-        res.redirect('/'); //TODO check redirect requriments
+        res.redirect('/'); 
     } catch (err) {
         console.error(err);
-        //TODO send error messages
         const errors = mapErrors(err);
-        res.render('login', {  data: { username: req.body.username }, errors });
+        res.render('login',{ title: 'Login Page',  data: { email: req.body.email }, errors });
     }
 });
 

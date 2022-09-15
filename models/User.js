@@ -3,12 +3,14 @@ const { Schema, model } = require('mongoose');
 //TODO change user model according to exam description
 //TODO add validations
 const userSchema = new Schema({
-    username: { type: String, require: true },
+    firstName: { type: String, require: true },
+    lastName: { type: String, require: true },
+    email: { type: String, require: true },
     hashedPassword: { type: String, require: true }
 });
 
 
-userSchema.index({ username: 1 }, {
+userSchema.index({ email: 1 }, {
     unique: true,
     collation: {
         locale: 'en',
