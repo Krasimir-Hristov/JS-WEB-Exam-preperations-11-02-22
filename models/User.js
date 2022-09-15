@@ -1,9 +1,15 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model }  = require('mongoose')
 
-//TODO change user model according to exam description
 //TODO add validations
+
+const NAME_PATTAERN = /^[a-zA-Z-]+$/;
 const userSchema = new Schema({
-    firstName: { type: String, require: true },
+    firstName: { type: String, require: true, minLength: [3, 'First name must be at least 3 characters long'], validate: {
+        validator(value) {
+            return NAME_PATTAERN.test(value);
+        },
+        message: 'First name may contain only english letters'
+    } },
     lastName: { type: String, require: true },
     email: { type: String, require: true },
     hashedPassword: { type: String, require: true }
@@ -20,4 +26,4 @@ userSchema.index({ email: 1 }, {
 
 const User = model('User', userSchema);
 
-module.exports = User;
+module.exports = User; 
