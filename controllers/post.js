@@ -1,6 +1,6 @@
 const { isUser } = require('../middleware/guards');
 const { createPost } = require('../services/post');
-const mapErrors = require('../util/mappers');
+const { mapErrors } = require('../util/mappers');
 
 const router = require('express').Router();
 
