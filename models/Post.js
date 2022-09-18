@@ -16,7 +16,7 @@ const postSchema = new Schema({
     description: {type: String, minlength: [8, 'Descriptio must be at least 8 characters long']},
     author: { type: ObjectId, ref: 'User', required: true },
     votes: { type: [ObjectId], ref: 'User', default: [] },
-    raiting: { type: Number, default: 0 }
+    rating: { type: Number, default: 0 }
 });
 
 const Post = model('Post', postSchema);

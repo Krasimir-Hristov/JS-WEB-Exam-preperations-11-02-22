@@ -1,4 +1,5 @@
-const { getPosts, getPostById } = require('../services/post');
+const { isUser } = require('../middleware/guards');
+const { getPosts, getPostById, getPostByAuthor } = require('../services/post');
 const { postViewModel } = require('../util/mappers');
 
 
@@ -23,12 +24,18 @@ router.get('/catalog/:id', async (req, res) => {
         if(req.session.user._id == post.author._id) {
         post.isAuthor = true;
 
+        } else {
+            post.hasVoted = post.votes.find(v => v._id == req.session.user._id) != undefined;
         }
-        //TODO check votes
     }
     
     res.render('details', { title: post.title, post});
-})
+});
+
+router.get('/profile', isUser(), async (req, res) => {
+    const posts = (await getPostByAuthor(req.session.user._id)).map(postViewModel);
+    res.render('profile', { title: 'My Posts', posts });
+});
 
 
 module.exports = router;
