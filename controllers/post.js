@@ -1,6 +1,6 @@
 const { isUser } = require('../middleware/guards');
-const { createPost } = require('../services/post');
-const { mapErrors } = require('../util/mappers');
+const { createPost, getPostById } = require('../services/post');
+const { mapErrors, postViewModel } = require('../util/mappers');
 
 const router = require('express').Router();
 
@@ -33,5 +33,17 @@ router.post('/create', isUser(), async(req, res) => {
     }
 
 });
+
+router.get('/edit/:id', isUser(), async (req, res) => {
+    const id = req.params.id;
+    const post = postViewModel(await getPostById(id));
+
+        if(req.session.user._id != post.author._id) {
+            return res.redirect('/login');
+        }
+
+        res.render('edit', { title: 'Edit Post', post });
+});
+
 
 module.exports = router;

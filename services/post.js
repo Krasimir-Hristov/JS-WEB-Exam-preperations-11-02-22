@@ -13,7 +13,7 @@ async function getPosts() {
 }
 
 async function getPostById(id) {
-    return Post.findById(id).populate('author', 'firstName, lastName');
+    return Post.findById(id).populate('author', 'firstName lastName');
 }
 
 
